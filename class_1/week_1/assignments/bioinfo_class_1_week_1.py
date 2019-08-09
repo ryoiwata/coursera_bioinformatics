@@ -35,6 +35,58 @@ def frequent_words(text, k):
                 pass
     return result
 
+def number_base_convertor(number,base):
+    #converts a base 10 number to a number of an identified base
+    single_digit_numbers = "0123456789abcdefghijklmnopqrstuvwxyz"
+    if number < base:
+        return single_digit_numbers[number]
+    else:
+        return number_base_convertor(number // base, base) + single_digit_numbers[number % base]
+
+def number_base_reverse_convertor(number,base):
+    #converts a number with an identified base back to a base 10 number
+    print(int(str(number), base))
+
+def number_to_pattern(number):
+    #converts a base 10 number to a number of an identified base
+    single_digit_numbers = "ACGT"
+    if number < 4:
+        return single_digit_numbers[number]
+    else:
+        return number_to_pattern(number // 4) + single_digit_numbers[number % 4]
+
+def pattern_to_number(pattern):
+    #converts a pattern to a base 4 number then back to a base 10 number
+    base_4_number = ""
+    ranking_dict = {"A": "0", "C": "1", "G": "2", "T": "3"}
+    
+    for letter in pattern:
+        base_4_number += ranking_dict[letter]
+    return number_base_reverse_convertor(base_4_number, 4)
+
+def computing_frequencies(Text, k):
+    #finds the frequency of all k-mer subsequences in the text
+    frequency_array = {}
+
+    #step 1 create frequency dictionary
+    #initializes a dictionary with all k-mer subsequences in alphabetical order with a value of 0
+    for i in range(4 ** k):
+        pattern = number_to_pattern(i)
+        while len(pattern) < k:
+            pattern = "A" + pattern
+        frequency_array[pattern] = 0
+    
+    #step 2 update the frequencies
+    #iterates through each k-mer subsequence of the text and updating the frequence dictionary
+    for i in range(len(Text) - k + 1):
+        subsequence = Text[i: i + k]
+        if subsequence in frequency_array:
+            frequency_array[subsequence] += 1
+    
+    #return as a list
+    return list(frequency_array.values())
+    #return as a dictionary
+    return frequency_array
 
 def reverse_compliment(input_string):
     result = ""
@@ -53,14 +105,3 @@ def pattern_matching(pattern, genome):
     # return result_str
     return result
     
-
-text = "TTGCAAACCCTCCGCTCCTTGCAAACCCTTGCAAACCCTTGGAACCTTGCAAACCCTTGCAAACCCTTGGAACCTTGCAAACCCTTGGAACCTCCGCTCCGGTGGGAGAATGGCAGGCGGTGGGAGTCCGCTCCTTGGAACCTTGCAAACCCAATGGCAGGCTCCGCTCCAATGGCAGGCGGTGGGAGTTGCAAACCCTTGCAAACCCAATGGCAGGCTTGGAACCTTGGAACCTCCGCTCCTTGGAACCTTGGAACCTTGGAACCTTGGAACCGGTGGGAGTCCGCTCCTCCGCTCCGGTGGGAGAATGGCAGGCTCCGCTCCTTGGAACCGGTGGGAGTTGGAACCTCCGCTCCAATGGCAGGCTTGCAAACCCAATGGCAGGCAATGGCAGGCTTGGAACCAATGGCAGGCAATGGCAGGCTCCGCTCCTTGGAACCTCCGCTCCAATGGCAGGCAATGGCAGGCTTGCAAACCCGGTGGGAGTCCGCTCCAATGGCAGGCTCCGCTCCGGTGGGAGTTGCAAACCCAATGGCAGGCTTGCAAACCCAATGGCAGGCTCCGCTCCTCCGCTCCAATGGCAGGCAATGGCAGGCTTGGAACCTCCGCTCCTTGCAAACCCGGTGGGAGTCCGCTCCAATGGCAGGCTCCGCTCCAATGGCAGGCTTGCAAACCCTTGGAACCAATGGCAGGCGGTGGGAGGGTGGGAGTTGCAAACCCTTGGAACCTTGCAAACCCTCCGCTCCTTGGAACCAATGGCAGGCTTGCAAACCCGGTGGGAGTCCGCTCCTTGCAAACCCTCCGCTCCTTGCAAACCCTTGCAAACCCTTGGAACCAATGGCAGGCTTGCAAACCCGGTGGGAGAATGGCAGGCTCCGCTCCTCCGCTCCTCCGCTCCAATGGCAGGCGGTGGGAGGGTGGGAGGGTGGGAGTCCGCTCCTTGCAAACCCTTGGAACCTCCGCTCCTTGCAAACCC"
-pattern = "GCG"
-
-print(frequent_words(text, 13))
-
-# pattern = "CTTGATCAT"
-# genome = open("../data/Vibrio_cholerae.txt")
-# genome_str = genome.read()
-
-# print(pattern_matching(pattern, genome_str))
