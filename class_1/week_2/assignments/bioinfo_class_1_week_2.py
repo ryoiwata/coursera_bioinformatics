@@ -104,6 +104,20 @@ def skew_G_minus_C(text):
     result.append(current_skew)
     return result
 
+def skew_minimum(skew_list):
+    #returns the index where the skew is the lowest
+    result = []
+    i = 0
+    for skew in skew_list:
+        if result == []:
+            result = [i]
+        elif skew < skew_list[result[0]]:
+            result = [i]
+        elif skew == skew_list[result[0]]:
+            result.append(i)
+        i += 1
+    return result
+
 def reverse_compliment(input_string):
     result = ""
     compliment_dict = {"A": "T", "C": "G", "G": "C", "T": "A"}
@@ -121,4 +135,5 @@ def pattern_matching(pattern, genome):
     # return result_str
     return result
     
-print (skew_G_minus_C("CATGGGCATCGGCCATACGCC"))
+skew_list = skew_G_minus_C("TAAAGACTGCCGAGAGGCCAACACGAGTGCTAGAACGAGGGGCGTAAACGCGGGTCCGAT")
+print(skew_minimum(skew_list))
