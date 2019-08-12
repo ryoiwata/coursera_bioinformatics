@@ -46,7 +46,7 @@ def number_base_convertor(number,base):
 def number_base_reverse_convertor(number,base):
     #converts a number with an identified base back to a base 10 number
     print(int(str(number), base))
-
+    
 def number_to_pattern(number):
     #converts a base 10 number to a number of an identified base
     single_digit_numbers = "ACGT"
@@ -63,6 +63,41 @@ def pattern_to_number(pattern):
     for letter in pattern:
         base_4_number += ranking_dict[letter]
     return number_base_reverse_convertor(base_4_number, 4)
+
+def pattern_to_number_with_recursion(pattern):
+    """
+    if Pattern contains no symbols
+        return 0
+    symbol ← LastSymbol(Pattern)
+    Prefix ← Prefix(Pattern)
+    return 4 · PatternToNumber(Prefix) + SymbolToNumber(symbol)
+    """
+    if len(pattern) < 1: 
+        return 0
+    ranking_dict = {"A": 0, "C": 1, "G": 2, "T": 3}
+    last_nucleotide = pattern[-1]
+    prefix_nucleotide = pattern[:-1]
+    return 4 * int(pattern_to_number_with_recursion(prefix_nucleotide)) + ranking_dict[last_nucleotide]
+
+def number_to_pattern_with_recursion(index, k):
+    """
+    if k = 1
+        return NumberToSymbol(index)
+    prefixIndex ← Quotient(index, 4)
+    r ← Remainder(index, 4)
+    symbol ← NumberToSymbol(r)
+    PrefixPattern ← NumberToPattern(prefixIndex, k − 1)
+    return concatenation of PrefixPattern with symbol
+    """
+    number_to_symbol = {0: "A", 1: "C", 2: "G", 3: "T"}
+    if k == 1:
+        return number_to_symbol[index]
+    prefix_index = index // 4
+    remainder_index = index % 4
+    symbol = number_to_symbol[remainder_index]
+    prefix_pattern = number_to_pattern_with_recursion(prefix_index, k - 1)
+    return prefix_pattern + symbol
+
 
 def computing_frequencies(Text, k):
     #finds the frequency of all k-mer subsequences in the text
@@ -87,6 +122,9 @@ def computing_frequencies(Text, k):
     return list(frequency_array.values())
     #return as a dictionary
     return frequency_array
+
+
+
 
 def skew_G_minus_C(text):
     #return the skew 
@@ -134,6 +172,5 @@ def pattern_matching(pattern, genome):
             result_str += str(index) + " "
     # return result_str
     return result
-    
-skew_list = skew_G_minus_C("TAAAGACTGCCGAGAGGCCAACACGAGTGCTAGAACGAGGGGCGTAAACGCGGGTCCGAT")
-print(skew_minimum(skew_list))
+
+print(number_to_pattern_with_recursion(5179, 10))
