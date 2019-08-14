@@ -170,4 +170,43 @@ def pattern_matching(pattern, genome):
     # return result_str
     return result
 
-print(clump_finding("CGGACTCGACAGATGTGAAGAACGACAATGTGAAGACTCGACACGACAGAGTGAAGAGAAGAGGAAACATTGTAA", 5,50,4))
+# 1.4 Some Hidden Messages are More Elusive than Others
+
+def hamming_distance(str1, str2):
+    """
+    Hamming Distance Problem: Compute the Hamming distance between two strings.
+    Input: Two strings of equal length.
+    Output: The Hamming distance between these strings.
+    """
+    result = 0
+    for nucleotide_1, nucleotide_2 in zip(str1, str2):
+        if nucleotide_1 != nucleotide_2:
+            result += 1
+    return result
+
+def appoximate_pattern_matching(pattern, text, number_of_mismatches):
+    """
+    Approximate Pattern Matching Problem: Find all approximate occurrences of a pattern in a string.
+     Input: Strings Pattern and Text along with an integer d.
+     Output: All starting positions where Pattern appears as a substring of Text with at most d mismatches.
+    """
+    result = []
+    for i in range(len(text) - len(pattern) + 1):
+        current_sequence = text[i:i+len(pattern)]
+        distance = hamming_distance(pattern, current_sequence)
+        if distance <= number_of_mismatches:
+            result.append(i)
+    return result
+
+def approximate_pattern_count(pattern, text, number_of_mismatches):
+    """
+    Input: Strings Text and Pattern as well as an integer d.
+    Output: Countd(Text, Pattern)
+    """
+    result = 0 
+    for i in range(len(text) - len(pattern) + 1):
+        current_sequence = text[i:i+len(pattern)]
+        distance = hamming_distance(pattern, current_sequence)
+        if distance <= number_of_mismatches:
+            result += 1
+    return result
