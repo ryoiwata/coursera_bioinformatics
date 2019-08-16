@@ -213,6 +213,35 @@ def approximate_pattern_count(pattern, text, number_of_mismatches):
             result += 1
     return result
 
+def frequent_words_with_mismatches(text, k, distance):
+    """
+    Find the most frequent k-mers with mismatches in a string.
+
+    Input: A string Text as well as integers k and d. (You may assume k ≤ 12 and d ≤ 3.)
+    Output: All most frequent k-mers with up to d mismatches in Text.
+    """
+    
+    neighbor_dict = {}
+    for i in range(len(text) - k + 1):
+        k_mer = text[i:i+k]
+        k_mer_neighbors = neighbors(k_mer, distance)
+        for neighbor in k_mer_neighbors:
+            if neighbor in neighbor_dict:
+                neighbor_dict[neighbor] += 1
+            else:
+                neighbor_dict[neighbor] = 1
+    
+    result = []
+    for n in neighbor_dict:
+        if len(result) == 0:
+            result.append(n)
+            continue
+        if neighbor_dict[n] > neighbor_dict[result[0]]:
+            result = [n]
+        elif neighbor_dict[n] == neighbor_dict[result[0]]:
+            result.append(n)       
+            
+    return result
 
 # 1.8 CS: Generating the Neighborhood of a String
 
