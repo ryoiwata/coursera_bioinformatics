@@ -123,6 +123,8 @@ def computing_frequencies(Text, k):
     #return as a dictionary
     return frequency_array
 
+#1.3 Peculiar Statistics of the Forward and Reverse Half-Strands 
+
 def skew_G_minus_C(text):
     #return the skew 
     # skew is defined as the number of G nucleotides minue C nucleotides for each location of the sequence 
