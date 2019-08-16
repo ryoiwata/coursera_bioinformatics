@@ -212,3 +212,26 @@ def approximate_pattern_count(pattern, text, number_of_mismatches):
         if distance <= number_of_mismatches:
             result += 1
     return result
+
+
+# 1.8 CS: Generating the Neighborhood of a String
+
+def neighbors(pattern, distance):
+    """
+    Input: A string Pattern and an integer d.
+    Output: The collection of strings Neighbors(Pattern, d). (You may return the strings in any order, but each line should contain only one string.)
+    """
+    
+    if distance == 0:
+        return set(pattern)
+    if len(pattern) == 1:
+        return set(["A", "C", "G", "T"])
+    neighborhood = set()
+    suffix_neighbors = neighbors(pattern[1:], distance)
+    for neighbor in suffix_neighbors:
+        if hamming_distance(pattern[1:], neighbor) < distance:
+            for nucleotide in ["A", "C", "G", "T"]:
+                neighborhood.add(nucleotide + neighbor)
+        else:
+            neighborhood.add(pattern[0] + neighbor)
+    return neighborhood
