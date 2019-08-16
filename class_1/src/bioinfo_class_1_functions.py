@@ -1,3 +1,13 @@
+def reverse_compliment(text):
+    """
+    returns the reverse_compliment of a given sequence
+    """
+    compliment_dict = {"A": "T", "C": "G", "G": "C", "T": "A"}
+    result = ""
+    for nucleotide in text[::-1]:
+        result += compliment_dict[nucleotide]
+    return result
+
 def pattern_count(text, pattern):
     #returns the count of occurances of a pattern in a sequence
     count = 0
@@ -241,6 +251,45 @@ def frequent_words_with_mismatches(text, k, distance):
         elif neighbor_dict[n] == neighbor_dict[result[0]]:
             result.append(n)       
             
+    return result
+
+def frequent_words_with_mismatches_reverse_compliments(text, k, distance):
+    """
+    Find the most frequent k-mers (with mismatches and reverse complements) in a string.
+
+    Input: A DNA string Text as well as integers k and d.
+    Output: All k-mers Pattern maximizing the sum Countd(Text, Pattern)+ Countd(Text, Patternrc) over all possible k-mers.
+    """
+    neighbor_dict = {}
+    for i in range(len(text) - k + 1):
+        k_mer = text[i:i+k]
+        k_mer_neighbors = neighbors(k_mer, distance)
+        for neighbor in k_mer_neighbors:
+            if neighbor in neighbor_dict:
+                neighbor_dict[neighbor] += 1
+            else:
+                neighbor_dict[neighbor] = 1
+    
+    rc = reverse_compliment(text)
+    
+    for i in range(len(rc) - k + 1):
+        k_mer = rc[i:i+k]
+        k_mer_neighbors = neighbors(k_mer, distance)
+        for neighbor in k_mer_neighbors:
+            if neighbor in neighbor_dict:
+                neighbor_dict[neighbor] += 1
+            else:
+                neighbor_dict[neighbor] = 1
+
+    result = []
+    for n in neighbor_dict:
+        if len(result) == 0:
+            result.append(n)
+            continue
+        if neighbor_dict[n] > neighbor_dict[result[0]]:
+            result = [n]
+        elif neighbor_dict[n] == neighbor_dict[result[0]]:
+            result.append(n)       
     return result
 
 # 1.8 CS: Generating the Neighborhood of a String
