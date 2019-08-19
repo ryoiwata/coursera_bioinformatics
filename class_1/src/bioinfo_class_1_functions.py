@@ -313,3 +313,44 @@ def neighbors(pattern, distance):
         else:
             neighborhood.add(pattern[0] + neighbor)
     return neighborhood
+
+# Week 3 Which DNA Patterns Serve ad Molecular Clocks
+
+#1.2 Motif Finding Is More Difficult Than You Think
+
+def motif_enumeration(dna, k, d):
+    """
+    Implanted Motif Problem: Find all (k, d)-motifs in a collection of strings.
+
+    Input: A collection of strings Dna, and integers k and d.
+    Output: All (k, d)-motifs in Dna.
+    """
+    #initialize an empty set so that no duplicates
+    patterns = set()
+    #iterate through each item in the dna list to get all k-mers
+    for text in dna:
+        for i in range(len(text) - k  + 1):
+            current_sequence = text[i:i+k]
+            
+            #iterate through each neighbor of all k-mers
+            sequence_neighbors = neighbors(current_sequence, d)
+            for sequence in sequence_neighbors:
+                
+                #a list that checks if each neighbor has approximate match to each item in the dna list
+                check_list = []
+                
+                #iterating each item in dna to check for approximate match with neighbor
+                for text1 in dna:
+                    #iterating through each k-mer in item to measure hamming distance
+                    for i1 in range(len(text1) - k + 1):
+                        current_sequence_1 = text1[i1: i1 + k]
+                        
+                        #if there's an approximate match, move onto the next item in dna
+                        if hamming_distance(current_sequence_1, sequence) <= d:
+                            check_list.append(True)
+                            break 
+                            
+                #if there's an approximate match in every item, then we add the neighbor to the set
+                if sum(check_list) == len(dna):
+                    patterns.add(sequence)
+    return patterns
